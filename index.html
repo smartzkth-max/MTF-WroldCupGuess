@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MTF World Cup Guess</title>
+  <style>
+    :root{--bg:#07111f;--panel:#162232;--panel2:#1d2a3c;--text:#f6f8fb;--muted:#aebbd0;--line:#304057;--accent:#4ee0a1;--accent2:#7dd3fc;--danger:#fb7185;--warn:#fbbf24;--shadow:0 20px 70px rgba(0,0,0,.35);--radius:24px}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#13223a 0,#07111f 45%,#050b14 100%);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
+    .wrap{max-width:1280px;margin:0 auto;padding:28px 22px 60px}.hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:28px;align-items:center;padding:34px;border:1px solid var(--line);border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.035));box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"⚽";position:absolute;right:310px;top:12px;font-size:110px;opacity:.06}.eyebrow{color:var(--accent);font-weight:900;letter-spacing:.2em;font-size:12px;text-transform:uppercase}.hero h1{font-size:clamp(42px,7vw,86px);line-height:.95;margin:18px 0 22px;letter-spacing:-.06em}.hero p{color:var(--muted);font-size:18px;max-width:850px}.score-card{background:linear-gradient(160deg,rgba(78,224,161,.25),rgba(125,211,252,.14));border:1px solid rgba(255,255,255,.13);border-radius:28px;text-align:center;padding:24px}.big-num{font-size:72px;font-weight:1000;line-height:1}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0;padding:10px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px}.tab{border:0;background:transparent;color:var(--muted);padding:14px 20px;border-radius:999px;font-weight:850;cursor:pointer}.tab.active{background:var(--accent);color:#061017}.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel{background:rgba(22,34,50,.88);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 12px 40px rgba(0,0,0,.18)}.panel.soft{background:linear-gradient(135deg,rgba(78,224,161,.18),rgba(125,211,252,.1))}.section{display:none}.section.active{display:block}.label,.small-title{display:block;margin:14px 0 7px;color:#d9e3f3;font-weight:800}.hint{color:var(--muted);font-size:14px}.small-title{color:var(--accent);letter-spacing:.16em;text-transform:uppercase;font-size:12px}h2,h3{line-height:1.1;margin:6px 0 16px}h2{font-size:34px;letter-spacing:-.03em}h3{font-size:24px}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}input,select,textarea{width:100%;border:1px solid #3b4d66;border-radius:15px;background:#0b1524;color:var(--text);padding:13px 14px;font:inherit;outline:none}textarea{min-height:94px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(78,224,161,.14)}button,.btn{border:0;border-radius:16px;padding:13px 18px;font-weight:900;cursor:pointer;background:#263449;color:var(--text);display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none}.btn.primary,button.primary{background:var(--accent);color:#061017}.btn.warn{background:var(--warn);color:#1a1200}.btn.danger{background:var(--danger);color:white}.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.status{margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:#0a1320;color:var(--muted);white-space:pre-wrap}.status.ok{border-color:rgba(78,224,161,.55);color:#b7f7dc}.status.bad{border-color:rgba(251,113,133,.65);color:#ffc5cf}.status.warn{border-color:rgba(251,191,36,.65);color:#ffe3a3}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px;margin-top:14px}table{width:100%;border-collapse:collapse;min-width:840px}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;background:#101a29}tr:last-child td{border-bottom:0}.pill{display:inline-flex;padding:4px 9px;border-radius:999px;background:#25364c;color:#cdd8ec;font-size:12px;font-weight:800}.leader{font-weight:950;color:var(--accent)}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat{background:#0b1524;border:1px solid var(--line);border-radius:18px;padding:18px}.stat b{font-size:28px}.team-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.team-chip{border:1px solid var(--line);border-radius:14px;padding:10px;background:#0b1524}.copybox{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;background:#050b14;border:1px solid var(--line);border-radius:15px;padding:12px;word-break:break-all;color:#bfdbfe}.footer{text-align:center;color:var(--muted);margin-top:28px}.sep{height:1px;background:var(--line);margin:22px 0}.hidden{display:none!important}@media(max-width:900px){.hero,.grid{grid-template-columns:1fr}.hero{padding:26px}.score-card{max-width:none}.row,.row3{grid-template-columns:1fr}.cards,.team-list{grid-template-columns:1fr 1fr}.tabs{border-radius:22px}.tab{flex:1 1 auto}}@media(max-width:560px){.cards,.team-list{grid-template-columns:1fr}.hero h1{font-size:42px}.wrap{padding:16px 12px 40px}.panel{padding:18px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">World Cup 2026 • Friends Game</div>
+      <h1>MTF World Cup Guess</h1>
+      <p>Friends pick the champion, runner-up, Golden Boot and more. All submissions save to your Google Sheet, then the leaderboard is calculated after the tournament.</p>
+      <div class="actions"><button class="primary" data-tabgo="submit">Submit picks</button><button data-tabgo="participants">Who joined?</button><button class="admin-only" data-tabgo="settings">Setup database</button></div>
+    </div>
+    <div class="score-card">
+      <div class="big-num" id="heroCount">0</div>
+      <strong>players joined</strong>
+      <p class="hint" id="heroStatus">Connect Google Sheets to start.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="submit">Submit Picks</button>
+    <button class="tab" data-tab="participants">Participants</button>
+    <button class="tab admin-only" data-tab="results">Admin Results & Scoring</button>
+    <button class="tab admin-only" data-tab="settings">Admin Settings</button>
+  </nav>
+
+  <section id="dashboard" class="section active">
+    <div class="grid">
+      <div class="panel">
+        <div class="small-title">Live Table</div><h2>Leaderboard</h2>
+        <div class="actions"><button class="primary" id="dashLoadBtn">Refresh from Google Sheet</button><button id="copySummaryBtn">Copy summary</button></div>
+        <div id="dashboardStatus" class="status">No data loaded yet.</div>
+        <div id="leaderboardBox" class="table-wrap hidden"></div>
+      </div>
+      <div class="panel soft">
+        <div class="small-title">Recommended game rule</div><h2>Simple and fair scoring</h2>
+        <p>Big points for hard predictions. Smaller fun-category points. You can adjust point values before final scoring.</p>
+        <div class="cards">
+          <div class="stat"><span class="hint">Champion</span><br><b>40</b></div>
+          <div class="stat"><span class="hint">Runner-up</span><br><b>30</b></div>
+          <div class="stat"><span class="hint">Golden Boot</span><br><b>20</b></div>
+          <div class="stat"><span class="hint">Bonus categories</span><br><b>10–15</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:22px"><div class="small-title">Quick Snapshot</div><h2>Current friend picks</h2><div id="snapshotBox" class="hint">Load data to see the popular picks.</div></div>
+  </section>
+
+  <section id="submit" class="section">
+    <div class="panel">
+      <div class="small-title">Friend Submission</div><h2>Submit your picks</h2>
+      <p class="hint">Each friend can submit once. If the same name/contact submits again, the Google Sheet row will be updated instead of duplicated.</p>
+      <form id="pickForm">
+        <div class="row">
+          <div><label class="label">Your name *</label><input id="playerName" required placeholder="e.g. Thiha" /></div>
+          <div><label class="label">Contact / WhatsApp / email</label><input id="contact" placeholder="optional, helps avoid duplicate names" /></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Champion *</label><select id="champion" required></select></div>
+          <div><label class="label">1st runner-up *</label><select id="runnerUp" required></select></div>
+          <div><label class="label">3rd place</label><select id="thirdPlace"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">4th place</label><select id="fourthPlace"></select></div>
+          <div><label class="label">Highest scoring team</label><select id="highestScoringTeam"></select></div>
+          <div><label class="label">Surprise / dark horse team</label><select id="darkHorse"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Golden Boot / top scorer</label><input id="goldenBoot" list="playersList" placeholder="e.g. Kylian Mbappé" /></div>
+          <div><label class="label">Golden Ball</label><input id="goldenBall" list="playersList" placeholder="Best player" /></div>
+          <div><label class="label">Golden Glove</label><select id="goldenGlove"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Most assists</label><input id="mostAssists" list="playersList" placeholder="Assist leader" /></div>
+          <div><label class="label">Final winner goals</label><input id="finalWinnerGoals" type="number" min="0" max="15" placeholder="optional" /></div>
+          <div><label class="label">Final runner-up goals</label><input id="finalRunnerUpGoals" type="number" min="0" max="15" placeholder="optional" /></div>
+        </div>
+        <label class="label">Notes / banter</label><textarea id="notes" placeholder="Optional comment"></textarea>
+        <div class="actions"><button class="primary" type="submit">Save to Google Sheet</button><button type="button" id="resetFormBtn">Clear form</button></div>
+        <div id="submitStatus" class="status">Before friends can submit, configure the Google Apps Script URL in Settings.</div>
+      </form>
+    </div>
+  </section>
+
+  <section id="participants" class="section">
+    <div class="panel">
+      <div class="small-title">Joined players</div><h2>Participants</h2>
+      <div class="actions"><button class="primary" id="loadParticipantsBtn">Load from Google Sheet</button><button class="admin-only" id="exportCsvBtn">Export CSV</button><button class="admin-only hidden" id="exportJsonBtn" type="button">Export JSON</button></div>
+      <div id="participantsStatus" class="status">No data loaded yet.</div>
+      <div id="participantsTable" class="table-wrap hidden"></div>
+    </div>
+  </section>
+
+  <section id="results" class="section admin-only-section">
+    <div class="grid">
+      <div class="panel">
+        <div class="small-title">Final Results</div><h2>Enter official results</h2>
+        <p class="hint">Admin PIN is only saved in your browser. Do not share your admin link or PIN with friends.</p>
+        <div class="row">
+          <div><label class="label">Admin PIN</label><input id="adminPin" type="password" placeholder="Set in Apps Script" /></div>
+          <div><label class="label">Load / save results</label><div class="actions" style="margin:0"><button id="loadResultsBtn">Load</button><button class="primary" id="saveResultsBtn">Save</button></div></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Champion</label><select id="resChampion"></select></div>
+          <div><label class="label">Runner-up</label><select id="resRunnerUp"></select></div>
+          <div><label class="label">Third place</label><select id="resThirdPlace"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Fourth place</label><select id="resFourthPlace"></select></div>
+          <div><label class="label">Highest scoring team</label><select id="resHighestScoringTeam"></select></div>
+          <div><label class="label">Dark horse winner</label><select id="resDarkHorse"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Golden Boot</label><input id="resGoldenBoot" list="playersList" /></div>
+          <div><label class="label">Golden Ball</label><input id="resGoldenBall" list="playersList" /></div>
+          <div><label class="label">Golden Glove</label><select id="resGoldenGlove"></select></div>
+        </div>
+        <div class="row3">
+          <div><label class="label">Most assists</label><input id="resMostAssists" list="playersList" /></div>
+          <div><label class="label">Final winner goals</label><input id="resFinalWinnerGoals" type="number" min="0" max="15" /></div>
+          <div><label class="label">Final runner-up goals</label><input id="resFinalRunnerUpGoals" type="number" min="0" max="15" /></div>
+        </div>
+        <div id="resultsStatus" class="status">Load saved results or enter manually, then calculate leaderboard.</div>
+      </div>
+      <div class="panel">
+        <div class="small-title">Scoring points</div><h2>Point settings</h2>
+        <div id="pointsGrid" class="row"></div>
+        <div class="actions"><button id="resetPointsBtn">Reset points</button><button class="primary" id="calculateBtn">Calculate Leaderboard</button></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:22px"><h2>Final leaderboard</h2><div id="finalLeaderboard" class="table-wrap hidden"></div></div>
+  </section>
+
+  <section id="database" class="section hidden">
+    <div class="grid">
+      <div class="panel"><div class="small-title">Included teams</div><h2>48 team database</h2><div id="teamsBox" class="team-list"></div></div>
+      <div class="panel"><div class="small-title">Player suggestions</div><h2>Editable typing suggestions</h2><p class="hint">Player fields allow manual typing, so you can enter any player not listed here.</p><div id="playersBox" class="team-list"></div></div>
+    </div>
+  </section>
+
+  <section id="settings" class="section admin-only-section">
+    <div class="grid">
+      <div class="panel">
+        <div class="small-title">Google Sheets Connection</div><h2>Setup database</h2>
+        <label class="label">Apps Script Web App URL</label><input id="endpoint" placeholder="https://script.google.com/macros/s/.../exec" />
+        <label class="label">Game Code</label><input id="gameCode" placeholder="Must match GAME_CODE in Code.gs" />
+        <label class="label">Admin PIN</label><input id="settingsAdminPin" type="password" placeholder="Optional on this device only" />
+        <div class="actions"><button class="primary" id="saveSettingsBtn">Save settings</button><button id="testBtn">Test connection</button><button id="clearSettingsBtn">Clear local settings</button></div>
+        <div id="settingsStatus" class="status">Paste your Web App URL after deploying Google Apps Script.</div>
+      </div>
+      <div class="panel soft">
+        <div class="small-title">Share Link</div><h2>Friend link</h2>
+        <p>The friend link contains the Web App URL and game code so friends do not need to configure Settings.</p>
+        <div class="actions"><button class="primary" id="copyFriendLinkBtn">Copy friend link</button><button id="copyAdminLinkBtn">Copy admin link</button></div>
+        <p class="hint">Admin link includes your admin PIN in the URL hash. Use it only on your own devices.</p>
+        <div class="copybox" id="shareBox">Save settings first.</div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:22px"><div class="small-title">Danger zone</div><h2>Clear all submitted picks</h2><p class="hint">This clears rows in the Google Sheet Picks tab. It does not delete the sheet.</p><div class="actions"><button class="danger" id="clearPicksBtn">Clear all picks</button></div><div id="dangerStatus" class="status">Use only for testing before sharing with friends.</div></div>
+  </section>
+
+  <datalist id="playersList"></datalist><datalist id="goalkeepersList"></datalist>
+  <div class="footer">Made for friendly competition. No betting features. Data stored in the organiser Google Sheet.</div>
+</div>
+<script>
+(() => {
+  const TEAMS = [
+    ['Mexico','MEX','🇲🇽','A'],['South Africa','RSA','🇿🇦','A'],['South Korea','KOR','🇰🇷','A'],['Czechia','CZE','🇨🇿','A'],
+    ['Canada','CAN','🇨🇦','B'],['Bosnia and Herzegovina','BIH','🇧🇦','B'],['Qatar','QAT','🇶🇦','B'],['Switzerland','SUI','🇨🇭','B'],
+    ['Brazil','BRA','🇧🇷','C'],['Morocco','MAR','🇲🇦','C'],['Haiti','HTI','🇭🇹','C'],['Scotland','SCO','🏴','C'],
+    ['United States','USA','🇺🇸','D'],['Paraguay','PAR','🇵🇾','D'],['Australia','AUS','🇦🇺','D'],['Turkey','TUR','🇹🇷','D'],
+    ['Germany','GER','🇩🇪','E'],['Curaçao','CUW','🇨🇼','E'],['Ivory Coast','CIV','🇨🇮','E'],['Ecuador','ECU','🇪🇨','E'],
+    ['Netherlands','NED','🇳🇱','F'],['Japan','JPN','🇯🇵','F'],['Sweden','SWE','🇸🇪','F'],['Tunisia','TUN','🇹🇳','F'],
+    ['Belgium','BEL','🇧🇪','G'],['Egypt','EGY','🇪🇬','G'],['Iran','IRI','🇮🇷','G'],['New Zealand','NZL','🇳🇿','G'],
+    ['Spain','ESP','🇪🇸','H'],['Cape Verde','CPV','🇨🇻','H'],['Saudi Arabia','KSA','🇸🇦','H'],['Uruguay','URU','🇺🇾','H'],
+    ['France','FRA','🇫🇷','I'],['Senegal','SEN','🇸🇳','I'],['Iraq','IRQ','🇮🇶','I'],['Norway','NOR','🇳🇴','I'],
+    ['Argentina','ARG','🇦🇷','J'],['Algeria','DZA','🇩🇿','J'],['Austria','AUT','🇦🇹','J'],['Jordan','JOR','🇯🇴','J'],
+    ['Portugal','POR','🇵🇹','K'],['DR Congo','COD','🇨🇩','K'],['Uzbekistan','UZB','🇺🇿','K'],['Colombia','COL','🇨🇴','K'],
+    ['England','ENG','🏴','L'],['Croatia','CRO','🇭🇷','L'],['Ghana','GHA','🇬🇭','L'],['Panama','PAN','🇵🇦','L']
+  ].map(([name,code,flag,group]) => ({name,code,flag,group,label:`${flag} ${name} (${code})`}));
+
+  const PLAYERS = ['Kylian Mbappé','Harry Kane','Erling Haaland','Lionel Messi','Julián Álvarez','Vinícius Júnior','Rodrygo','Raphinha','Lamine Yamal','Álvaro Morata','Mikel Oyarzabal','Cristiano Ronaldo','Bruno Fernandes','Kai Havertz','Jamal Musiala','Florian Wirtz','Bukayo Saka','Jude Bellingham','Phil Foden','Cody Gakpo','Memphis Depay','Xavi Simons','Romelu Lukaku','Kevin De Bruyne','Federico Valverde','Darwin Núñez','Luis Díaz','James Rodríguez','Mohamed Salah','Achraf Hakimi','Hakim Ziyech','Christian Pulisic','Folarin Balogun','Son Heung-min','Lee Kang-in','Takefusa Kubo','Kaoru Mitoma','Alexander Isak','Dejan Kulusevski','Yasin Ayari','Martin Ødegaard','Sadio Mané'];
+  const GKS = [
+    'Mike Maignan','Brice Samba','Alphonse Areola',
+    'Jordan Pickford','Aaron Ramsdale','Dean Henderson',
+    'Unai Simón','David Raya','Álex Remiro',
+    'Emiliano Martínez','Gerónimo Rulli','Franco Armani',
+    'Diogo Costa','José Sá','Rui Patrício',
+    'Alisson Becker','Ederson','Bento',
+    'Marc-André ter Stegen','Oliver Baumann','Alexander Nübel','Manuel Neuer',
+    'Thibaut Courtois','Koen Casteels','Matz Sels',
+    'Yassine Bounou','Munir Mohamedi',
+    'Dominik Livaković','Ivica Ivušić',
+    'Gregor Kobel','Yann Sommer','Yvon Mvogo',
+    'Bart Verbruggen','Justin Bijlow','Mark Flekken',
+    'Matt Turner','Zack Steffen','Patrick Schulte',
+    'Sergio Rochet','Fernando Muslera',
+    'Camilo Vargas','David Ospina','Álvaro Montero',
+    'Mohamed El Shenawy','Mohamed Awad',
+    'Édouard Mendy','Mory Diaw','Alfred Gomis',
+    'Ronwen Williams','Veli Mothwa',
+    'Jo Hyeon-woo','Kim Seung-gyu','Song Bum-keun',
+    'Zion Suzuki','Daiya Maekawa','Shūichi Gonda',
+    'Mathew Ryan','Joe Gauci','Andrew Redmayne',
+    'Robin Olsen','Viktor Johansson','Kristoffer Nordfeldt',
+    'Uğurcan Çakır','Altay Bayındır','Mert Günok',
+    'Luis Malagón','Guillermo Ochoa','Raúl Rangel',
+    'Jindřich Staněk','Matěj Kovář','Tomáš Koubek',
+    'Maxime Crépeau','Dayne St. Clair','Milan Borjan',
+    'Nikola Vasilj','Kenan Pirić','Ibrahim Šehić',
+    'Meshaal Barsham','Saad Al Sheeb',
+    'Johny Placide','Alexandre Pierre',
+    'Angus Gunn','Craig Gordon','Zander Clark',
+    'Roberto Fernández','Carlos Coronel',
+    'Eloy Room','Yahia Fofana','Hernán Galíndez','Alexander Domínguez',
+    'Aymen Dahmen','Bechir Ben Said',
+    'Alireza Beiranvand','Seyed Hossein Hosseini',
+    'Max Crocombe','Vozinha','Mohammed Al-Owais','Nawaf Al-Aqidi',
+    'Jalal Hassan','Ørjan Nyland','Anthony Mandrea','Patrick Pentz','Yazeed Abulaila',
+    'Lionel Mpasi','Utkir Yusupov','Lawrence Ati-Zigi','Orlando Mosquera'
+  ];
+  const DEFAULT_POINTS = {champion:40,runnerUp:30,thirdPlace:15,fourthPlace:10,goldenBoot:20,goldenBall:15,goldenGlove:12,mostAssists:12,highestScoringTeam:12,darkHorse:10,finalScore:10};
+  const POINT_LABELS = {champion:'Champion',runnerUp:'Runner-up',thirdPlace:'Third place',fourthPlace:'Fourth place',goldenBoot:'Golden Boot',goldenBall:'Golden Ball',goldenGlove:'Golden Glove',mostAssists:'Most assists',highestScoringTeam:'Highest scoring team',darkHorse:'Dark horse',finalScore:'Exact final score'};
+  const state = {picks:[], results:{}, points:{...DEFAULT_POINTS}};
+  const $ = id => document.getElementById(id);
+  const qsa = s => [...document.querySelectorAll(s)];
+
+  function init(){
+    parseSetupHash(); loadLocal(); fillSelects(); fillDatalists(); renderDatabase(); renderPoints(); bind(); applyAccessMode(); updateHero(); showShareLinks();
+    if(getCfg().endpoint) ping(false);
+  }
+
+  function bind(){
+    qsa('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+    qsa('[data-tabgo]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tabgo)));
+    $('pickForm').addEventListener('submit', submitPick);
+    $('resetFormBtn').addEventListener('click', () => $('pickForm').reset());
+    $('loadParticipantsBtn').addEventListener('click', loadPicks);
+    $('dashLoadBtn').addEventListener('click', loadPicks);
+    if($('exportCsvBtn')) $('exportCsvBtn').addEventListener('click', exportCsv);
+    if($('exportJsonBtn')) $('exportJsonBtn').addEventListener('click', exportJson);
+    $('loadResultsBtn').addEventListener('click', loadResults);
+    $('saveResultsBtn').addEventListener('click', saveResults);
+    $('calculateBtn').addEventListener('click', calculateAndRender);
+    $('resetPointsBtn').addEventListener('click', () => {state.points={...DEFAULT_POINTS}; savePoints(); renderPoints();});
+    $('saveSettingsBtn').addEventListener('click', saveSettings);
+    $('testBtn').addEventListener('click', () => ping(true));
+    $('clearSettingsBtn').addEventListener('click', clearSettings);
+    $('copyFriendLinkBtn').addEventListener('click', () => copyLink(false));
+    $('copyAdminLinkBtn').addEventListener('click', () => copyLink(true));
+    $('clearPicksBtn').addEventListener('click', clearPicks);
+    $('copySummaryBtn').addEventListener('click', copySummary);
+  }
+
+  function showTab(tab){
+    qsa('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    qsa('.section').forEach(s => s.classList.toggle('active', s.id === tab));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function fillSelects(){
+    const ids = ['champion','runnerUp','thirdPlace','fourthPlace','highestScoringTeam','darkHorse','resChampion','resRunnerUp','resThirdPlace','resFourthPlace','resHighestScoringTeam','resDarkHorse'];
+    ids.forEach(id => {
+      const el=$(id); if(!el) return; const required = ['champion','runnerUp'].includes(id);
+      el.innerHTML = required ? '<option value="">Select team...</option>' : '<option value="">-- optional --</option>';
+      const groups = {};
+      TEAMS.forEach(t => { groups[t.group] ||= []; groups[t.group].push(t); });
+      Object.keys(groups).forEach(g => { const og=document.createElement('optgroup'); og.label='Group '+g; groups[g].forEach(t=>{const o=document.createElement('option'); o.value=t.name; o.textContent=t.label; og.appendChild(o);}); el.appendChild(og); });
+    });
+    ['goldenGlove','resGoldenGlove'].forEach(id => {
+      const el=$(id); if(!el) return;
+      el.innerHTML = '<option value="">Select goalkeeper...</option>';
+      GKS.forEach(name => { const o=document.createElement('option'); o.value=name; o.textContent=name; el.appendChild(o); });
+    });
+  }
+  function fillDatalists(){ $('playersList').innerHTML = PLAYERS.map(p=>`<option value="${esc(p)}"></option>`).join(''); $('goalkeepersList').innerHTML = GKS.map(p=>`<option value="${esc(p)}"></option>`).join(''); }
+  function renderDatabase(){ $('teamsBox').innerHTML = TEAMS.map(t=>`<div class="team-chip"><b>${t.flag} ${esc(t.name)}</b><br><span class="hint">Group ${t.group} • ${t.code}</span></div>`).join(''); $('playersBox').innerHTML = [...PLAYERS.slice(0,32),...GKS.slice(0,8)].map(p=>`<div class="team-chip">${esc(p)}</div>`).join(''); }
+  function renderPoints(){ const box=$('pointsGrid'); box.innerHTML=''; Object.entries(POINT_LABELS).forEach(([key,label])=>{ const div=document.createElement('div'); div.innerHTML=`<label class="label">${label}</label><input type="number" min="0" id="pt_${key}" value="${state.points[key] ?? 0}">`; box.appendChild(div); }); box.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{ state.points[inp.id.replace('pt_','')] = Number(inp.value||0); savePoints(); })); }
+
+
+  function isAdminMode(){
+    const cfg=getCfg();
+    // Settings are visible on first setup. For friend links, admin tools are hidden unless an admin PIN is stored on this browser or included in the admin link.
+    return !cfg.endpoint || Boolean(cfg.adminPin);
+  }
+  function applyAccessMode(){
+    const admin=isAdminMode();
+    qsa('.admin-only').forEach(el => el.classList.toggle('hidden', !admin));
+    qsa('.admin-only-section').forEach(el => el.classList.toggle('hidden', !admin));
+    const active=document.querySelector('.section.active');
+    if(!admin && active && ['settings','results','database'].includes(active.id)) showTab('dashboard');
+  }
+
+  function getCfg(){ return {endpoint:localStorage.getItem('wcg_endpoint')||'', gameCode:localStorage.getItem('wcg_gameCode')||'', adminPin:localStorage.getItem('wcg_adminPin')||''}; }
+  function loadLocal(){ const cfg=getCfg(); $('endpoint').value=cfg.endpoint; $('gameCode').value=cfg.gameCode; $('adminPin').value=cfg.adminPin; $('settingsAdminPin').value=cfg.adminPin; try{ const p=JSON.parse(localStorage.getItem('wcg_points')||'null'); if(p) state.points={...DEFAULT_POINTS,...p}; }catch(e){} }
+  function savePoints(){ localStorage.setItem('wcg_points',JSON.stringify(state.points)); }
+  function saveSettings(){ const endpoint=$('endpoint').value.trim(); const gameCode=$('gameCode').value.trim(); const adminPin=$('settingsAdminPin').value.trim(); localStorage.setItem('wcg_endpoint',endpoint); localStorage.setItem('wcg_gameCode',gameCode); localStorage.setItem('wcg_adminPin',adminPin); $('adminPin').value=adminPin; setStatus('settingsStatus','Saved. Now click Test connection.','ok'); applyAccessMode(); showShareLinks(); updateHero(); }
+  function clearSettings(){ ['wcg_endpoint','wcg_gameCode','wcg_adminPin'].forEach(k=>localStorage.removeItem(k)); $('endpoint').value=$('gameCode').value=$('adminPin').value=$('settingsAdminPin').value=''; setStatus('settingsStatus','Local settings cleared.','warn'); applyAccessMode(); showShareLinks(); updateHero(); }
+  function parseSetupHash(){ const m = location.hash.match(/setup=([^&]+)/); if(!m) return; try{ const cfg = JSON.parse(decodeBase64Url(m[1])); if(cfg.endpoint) localStorage.setItem('wcg_endpoint',cfg.endpoint); if(cfg.gameCode) localStorage.setItem('wcg_gameCode',cfg.gameCode); if(cfg.adminPin) localStorage.setItem('wcg_adminPin',cfg.adminPin); history.replaceState(null,'',location.pathname + location.search); }catch(e){} }
+  function showShareLinks(){ const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){$('shareBox').textContent='Save endpoint and game code first.'; return;} $('shareBox').textContent=makeShareLink(false); }
+  function makeShareLink(admin){ const cfg=getCfg(); const payload={endpoint:cfg.endpoint,gameCode:cfg.gameCode}; if(admin) payload.adminPin=cfg.adminPin; return location.origin + location.pathname + '#setup=' + encodeBase64Url(JSON.stringify(payload)); }
+  async function copyLink(admin){ const link=makeShareLink(admin); await copyText(link); $('shareBox').textContent=link; setStatus('settingsStatus', admin?'Admin link copied. Do not share it with friends.':'Friend link copied. Share this link with friends.','ok'); }
+
+  async function ping(show){ const cfg=getCfg(); if(!cfg.endpoint){ if(show) setStatus('settingsStatus','Please paste Apps Script Web App URL first.','bad'); return; } try{ const r=await jsonp({action:'ping'}); if(r.ok){ if(show) setStatus('settingsStatus','Connected successfully: '+r.message,'ok'); $('heroStatus').textContent='Google Sheets connected.'; } else throw new Error(r.error||'Ping failed'); }catch(e){ if(show) setStatus('settingsStatus','Connection failed: '+e.message,'bad'); $('heroStatus').textContent='Database not connected.'; } }
+
+  async function submitPick(ev){ ev.preventDefault(); const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){ setStatus('submitStatus','Please configure Settings first.','bad'); showTab('settings'); return; }
+    const playerName=$('playerName').value.trim(); if(!playerName){ setStatus('submitStatus','Your name is required.','bad'); return; }
+    const picks=getFormPicks('');
+    if(picks.champion && picks.runnerUp && picks.champion===picks.runnerUp){ setStatus('submitStatus','Champion and runner-up cannot be the same team.','bad'); return; }
+    setStatus('submitStatus','Saving to Google Sheet...','warn');
+    const data={playerName,contact:$('contact').value.trim(),submittedAt:new Date().toISOString(),picks};
+    try{ const r=await jsonp({action:'submitPick',code:cfg.gameCode,payload:encodeBase64Url(JSON.stringify(data))}); if(!r.ok) throw new Error(r.error||'Submit failed'); setStatus('submitStatus',`Saved successfully for ${r.playerName}. Status: ${r.status}.\nYou can screenshot this page for backup.`, 'ok'); await loadPicks(false); showTab('participants'); } catch(e){ setStatus('submitStatus','Save failed: '+e.message,'bad'); }
+  }
+
+  function getFormPicks(prefix){ const id = k => (prefix? prefix + k[0].toUpperCase()+k.slice(1): k); return {champion:val(id('champion')),runnerUp:val(id('runnerUp')),thirdPlace:val(id('thirdPlace')),fourthPlace:val(id('fourthPlace')),goldenBoot:val(id('goldenBoot')),goldenBall:val(id('goldenBall')),goldenGlove:val(id('goldenGlove')),mostAssists:val(id('mostAssists')),highestScoringTeam:val(id('highestScoringTeam')),darkHorse:val(id('darkHorse')),finalWinnerGoals:val(id('finalWinnerGoals')),finalRunnerUpGoals:val(id('finalRunnerUpGoals')),notes:val(id('notes'))}; }
+  function val(id){ const el=$(id); return el?String(el.value||'').trim():''; }
+
+  async function loadPicks(show=true){ const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){ setStatus('participantsStatus','Please configure Settings first.','bad'); return; } if(show) setStatus('participantsStatus','Loading from Google Sheet...','warn'); try{ const r=await jsonp({action:'listPicks',code:cfg.gameCode}); if(!r.ok) throw new Error(r.error||'Load failed'); state.picks=r.picks||[]; renderParticipants(); updateHero(); renderSnapshot(); calculateAndRender(false); if(show) setStatus('participantsStatus',`Loaded ${state.picks.length} participant(s). Last refresh: ${new Date().toLocaleString()}`,'ok'); setStatus('dashboardStatus',`Loaded ${state.picks.length} participant(s).`, 'ok'); }catch(e){ setStatus('participantsStatus','Load failed: '+e.message,'bad'); setStatus('dashboardStatus','Load failed: '+e.message,'bad'); } }
+  function renderParticipants(){
+    const box=$('participantsTable');
+    if(!state.picks.length){box.classList.add('hidden'); box.innerHTML=''; return;}
+    box.classList.remove('hidden');
+    if(!isAdminMode()){
+      box.innerHTML=`<table><thead><tr><th>Name</th><th>Joined / Updated</th></tr></thead><tbody>${state.picks.map(p=>`<tr><td><b>${esc(p.playerName)}</b></td><td>${fmtDate(p.updatedAt)}</td></tr>`).join('')}</tbody></table>`;
+      return;
+    }
+    box.innerHTML=`<table><thead><tr><th>Name</th><th>Champion</th><th>Runner-up</th><th>Golden Boot</th><th>Golden Ball</th><th>Golden Glove</th><th>Highest Scoring Team</th><th>Updated</th></tr></thead><tbody>${state.picks.map(p=>`<tr><td><b>${esc(p.playerName)}</b><br><span class="hint">${esc(p.contact||'')}</span></td><td>${esc(p.picks.champion)}</td><td>${esc(p.picks.runnerUp)}</td><td>${esc(p.picks.goldenBoot)}</td><td>${esc(p.picks.goldenBall)}</td><td>${esc(p.picks.goldenGlove)}</td><td>${esc(p.picks.highestScoringTeam)}</td><td>${fmtDate(p.updatedAt)}</td></tr>`).join('')}</tbody></table>`;
+  }
+  function renderSnapshot(){ if(!state.picks.length){$('snapshotBox').textContent='No picks yet.'; return;} const keys=['champion','runnerUp','goldenBoot','highestScoringTeam']; $('snapshotBox').innerHTML = keys.map(k=>{ const c=countBy(state.picks.map(p=>p.picks[k]).filter(Boolean)); const top=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,4); return `<p><b>${POINT_LABELS[k]||k}:</b> ${top.map(([n,v])=>`${esc(n)} <span class="pill">${v}</span>`).join(' &nbsp; ') || 'No picks'}</p>`; }).join(''); }
+  function countBy(arr){ return arr.reduce((a,x)=>{a[x]=(a[x]||0)+1;return a;},{}); }
+
+  async function loadResults(){ const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){ setStatus('resultsStatus','Please configure Settings first.','bad'); return; } setStatus('resultsStatus','Loading results...','warn'); try{ const r=await jsonp({action:'getResults',code:cfg.gameCode}); if(!r.ok) throw new Error(r.error||'Load results failed'); state.results=r.results||{}; setResultsForm(state.results); setStatus('resultsStatus','Results loaded.','ok'); }catch(e){ setStatus('resultsStatus','Load failed: '+e.message,'bad'); } }
+  async function saveResults(){ const cfg=getCfg(); const pin=$('adminPin').value.trim(); localStorage.setItem('wcg_adminPin',pin); $('settingsAdminPin').value=pin; if(!cfg.endpoint||!cfg.gameCode){ setStatus('resultsStatus','Please configure Settings first.','bad'); return; } if(!pin){ setStatus('resultsStatus','Admin PIN required.','bad'); return; } state.results=getResultsForm(); setStatus('resultsStatus','Saving final results...','warn'); try{ const r=await jsonp({action:'saveResults',code:cfg.gameCode,adminPin:pin,payload:encodeBase64Url(JSON.stringify({results:state.results}))}); if(!r.ok) throw new Error(r.error||'Save results failed'); setStatus('resultsStatus','Final results saved to Google Sheet.','ok'); calculateAndRender(); }catch(e){ setStatus('resultsStatus','Save failed: '+e.message,'bad'); } }
+  function getResultsForm(){ return {champion:val('resChampion'),runnerUp:val('resRunnerUp'),thirdPlace:val('resThirdPlace'),fourthPlace:val('resFourthPlace'),goldenBoot:val('resGoldenBoot'),goldenBall:val('resGoldenBall'),goldenGlove:val('resGoldenGlove'),mostAssists:val('resMostAssists'),highestScoringTeam:val('resHighestScoringTeam'),darkHorse:val('resDarkHorse'),finalWinnerGoals:val('resFinalWinnerGoals'),finalRunnerUpGoals:val('resFinalRunnerUpGoals')}; }
+  function setResultsForm(r){ $('resChampion').value=r.champion||''; $('resRunnerUp').value=r.runnerUp||''; $('resThirdPlace').value=r.thirdPlace||''; $('resFourthPlace').value=r.fourthPlace||''; $('resGoldenBoot').value=r.goldenBoot||''; $('resGoldenBall').value=r.goldenBall||''; $('resGoldenGlove').value=r.goldenGlove||''; $('resMostAssists').value=r.mostAssists||''; $('resHighestScoringTeam').value=r.highestScoringTeam||''; $('resDarkHorse').value=r.darkHorse||''; $('resFinalWinnerGoals').value=r.finalWinnerGoals||''; $('resFinalRunnerUpGoals').value=r.finalRunnerUpGoals||''; }
+  function calculateAndRender(showMsg=true){ state.results=getResultsForm(); const rows = state.picks.map(p=>scorePick(p)).sort((a,b)=>b.total-a.total || a.name.localeCompare(b.name)); renderLeaderboard(rows,'finalLeaderboard'); renderLeaderboard(rows,'leaderboardBox'); if(showMsg) setStatus('resultsStatus',`Calculated ${rows.length} player score(s).`, rows.length?'ok':'warn'); return rows; }
+  function scorePick(p){ const picks=p.picks||{}; const r=state.results||{}; let total=0; const detail=[]; Object.keys(DEFAULT_POINTS).forEach(k=>{ if(k==='finalScore') return; const got=norm(picks[k]) && norm(picks[k])===norm(r[k]); if(got){ total += Number(state.points[k]||0); detail.push(`${POINT_LABELS[k]} +${state.points[k]||0}`); } }); if(norm(picks.finalWinnerGoals) && norm(picks.finalRunnerUpGoals) && norm(picks.finalWinnerGoals)===norm(r.finalWinnerGoals) && norm(picks.finalRunnerUpGoals)===norm(r.finalRunnerUpGoals)){ total += Number(state.points.finalScore||0); detail.push(`Exact final score +${state.points.finalScore||0}`); } return {name:p.playerName,contact:p.contact,total,detail,picks}; }
+  function renderLeaderboard(rows,boxId){ const box=$(boxId); if(!rows.length){box.classList.add('hidden'); box.innerHTML=''; return;} box.classList.remove('hidden'); box.innerHTML=`<table><thead><tr><th>Rank</th><th>Player</th><th>Points</th><th>Scoring Detail</th><th>Champion Pick</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td class="leader">${i+1}</td><td><b>${esc(r.name)}</b><br><span class="hint">${esc(r.contact||'')}</span></td><td><b>${r.total}</b></td><td>${r.detail.length?r.detail.map(esc).join('<br>'):'-'}</td><td>${esc(r.picks.champion||'')}</td></tr>`).join('')}</tbody></table>`; }
+
+  function exportCsv(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} const headers=['PlayerName','Contact','Champion','RunnerUp','ThirdPlace','FourthPlace','GoldenBoot','GoldenBall','GoldenGlove','MostAssists','HighestScoringTeam','DarkHorse','FinalWinnerGoals','FinalRunnerUpGoals','UpdatedAt']; const rows=state.picks.map(p=>[p.playerName,p.contact,p.picks.champion,p.picks.runnerUp,p.picks.thirdPlace,p.picks.fourthPlace,p.picks.goldenBoot,p.picks.goldenBall,p.picks.goldenGlove,p.picks.mostAssists,p.picks.highestScoringTeam,p.picks.darkHorse,p.picks.finalWinnerGoals,p.picks.finalRunnerUpGoals,p.updatedAt]); download('MTF-WorldCupGuess-picks.csv',[headers,...rows].map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv'); }
+  function exportJson(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} download('MTF-WorldCupGuess-picks.json',JSON.stringify({picks:state.picks,exportedAt:new Date().toISOString()},null,2),'application/json'); }
+  function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
+  function csvCell(v){ v=String(v??''); return '"'+v.replace(/"/g,'""')+'"'; }
+  async function clearPicks(){ const cfg=getCfg(); const pin=$('settingsAdminPin').value.trim() || $('adminPin').value.trim(); if(!confirm('Clear all submitted picks from Google Sheet?')) return; try{ const r=await jsonp({action:'clearPicks',code:cfg.gameCode,adminPin:pin}); if(!r.ok) throw new Error(r.error||'Clear failed'); state.picks=[]; renderParticipants(); updateHero(); setStatus('dangerStatus','All picks cleared.','ok'); }catch(e){ setStatus('dangerStatus','Clear failed: '+e.message,'bad'); } }
+  async function copySummary(){ const rows=calculateAndRender(false); const text=rows.length? rows.map((r,i)=>`${i+1}. ${r.name} - ${r.total} pts`).join('\n') : 'No scores yet.'; await copyText(text); setStatus('dashboardStatus','Summary copied.','ok'); }
+
+  function jsonp(params){ return new Promise((resolve,reject)=>{ const cfg=getCfg(); const endpoint=(cfg.endpoint||'').trim(); if(!endpoint) return reject(new Error('Apps Script URL not configured.')); const cb='wcg_cb_'+Date.now()+'_'+Math.floor(Math.random()*999999); params.callback=cb; const qs=Object.entries(params).filter(([,v])=>v!==undefined&&v!==null).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&'); const s=document.createElement('script'); const timer=setTimeout(()=>{cleanup(); reject(new Error('Request timed out. Check Apps Script deployment/access.'));},20000); function cleanup(){clearTimeout(timer); delete window[cb]; s.remove();} window[cb]=(data)=>{cleanup(); resolve(data);}; s.onerror=()=>{cleanup(); reject(new Error('Script request failed. Check URL ending /exec.'));}; s.src=endpoint + (endpoint.includes('?')?'&':'?') + qs; document.body.appendChild(s); }); }
+  function encodeBase64Url(str){ const bytes=new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+  function decodeBase64Url(str){ let s=str.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; const bin=atob(s); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return new TextDecoder().decode(bytes); }
+  function updateHero(){ $('heroCount').textContent=state.picks.length||0; const cfg=getCfg(); $('heroStatus').textContent=cfg.endpoint?'Google Sheets connected / ready.':'Connect Google Sheets to start.'; }
+  function setStatus(id,msg,type){ const el=$(id); if(!el) return; el.textContent=msg; el.className='status '+(type||''); }
+  function fmtDate(d){ if(!d) return ''; const dt=new Date(d); return isNaN(dt)?esc(d):dt.toLocaleString(); }
+  function esc(v){ return String(v??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
+  function norm(v){ return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+  async function copyText(t){ try{ await navigator.clipboard.writeText(t); }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } }
+
+  init();
+})();
+</script>
+</body>
+</html>
