@@ -22,13 +22,13 @@
     <div>
       <div class="eyebrow">World Cup 2026 • Friends Game</div>
       <h1>MTF World Cup Guess</h1>
-      <p>Friends pick the champion, runner-up, Golden Boot and more. All submissions save to your Google Sheet, then the leaderboard is calculated after the tournament.</p>
+      <p>Friends pick the champion, runner-up, Golden Boot and more. All entries are collected by the organiser, then the leaderboard is calculated after the tournament.</p>
       <div class="actions"><button class="primary" data-tabgo="submit">Submit picks</button><button data-tabgo="participants">Who joined?</button><button class="admin-only" data-tabgo="settings">Setup database</button></div>
     </div>
     <div class="score-card">
       <div class="big-num" id="heroCount">0</div>
       <strong>players joined</strong>
-      <p class="hint" id="heroStatus">Connect Google Sheets to start.</p>
+      <p class="hint" id="heroStatus">Open for setup.</p>
     </div>
   </header>
 
@@ -44,7 +44,7 @@
     <div class="grid">
       <div class="panel">
         <div class="small-title">Live Table</div><h2>Leaderboard</h2>
-        <div class="actions"><button class="primary" id="dashLoadBtn">Refresh from Google Sheet</button><button id="copySummaryBtn">Copy summary</button></div>
+        <div class="actions"><button class="primary" id="dashLoadBtn">Refresh</button><button id="copySummaryBtn">Copy summary</button></div>
         <div id="dashboardStatus" class="status">No data loaded yet.</div>
         <div id="leaderboardBox" class="table-wrap hidden"></div>
       </div>
@@ -65,7 +65,7 @@
   <section id="submit" class="section">
     <div class="panel">
       <div class="small-title">Friend Submission</div><h2>Submit your picks</h2>
-      <p class="hint">Each friend can submit once. If the same name/contact submits again, the Google Sheet row will be updated instead of duplicated.</p>
+      <p class="hint">Each friend can submit once. If the same name/contact submits again, the same entry will be updated instead of duplicated.</p>
       <form id="pickForm">
         <div class="row">
           <div><label class="label">Your name *</label><input id="playerName" required placeholder="e.g. Thiha" /></div>
@@ -92,7 +92,7 @@
           <div><label class="label">Final runner-up goals</label><input id="finalRunnerUpGoals" type="number" min="0" max="15" placeholder="optional" /></div>
         </div>
         <label class="label">Notes / banter</label><textarea id="notes" placeholder="Optional comment"></textarea>
-        <div class="actions"><button class="primary" type="submit">Save to Google Sheet</button><button type="button" id="resetFormBtn">Clear form</button></div>
+        <div class="actions"><button class="primary" type="submit">Submit Picks</button><button type="button" id="resetFormBtn">Clear form</button></div>
         <div id="submitStatus" class="status hidden"></div>
       </form>
     </div>
@@ -101,7 +101,7 @@
   <section id="participants" class="section">
     <div class="panel">
       <div class="small-title">Joined players</div><h2>Participants</h2>
-      <div class="actions"><button class="primary" id="loadParticipantsBtn">Load from Google Sheet</button><button class="admin-only" id="exportCsvBtn">Export CSV</button><button class="admin-only hidden" id="exportJsonBtn" type="button">Export JSON</button></div>
+      <div class="actions"><button class="primary" id="loadParticipantsBtn">Refresh Participants</button><button class="admin-only" id="exportCsvBtn">Export CSV</button><button class="admin-only hidden" id="exportJsonBtn" type="button">Export JSON</button></div>
       <div id="participantsStatus" class="status">No data loaded yet.</div>
       <div id="participantsTable" class="table-wrap hidden"></div>
     </div>
@@ -187,7 +187,7 @@
   </section>
 
   <datalist id="playersList"></datalist><datalist id="goalkeepersList"></datalist>
-  <div class="footer">Made for friendly competition. No betting features. Data stored in the organiser Google Sheet.</div>
+  <div class="footer">Made for friendly competition. No betting features. Data stored by the organiser.</div>
 </div>
 <script>
 (() => {
@@ -336,15 +336,15 @@
   async function copyLink(admin){ const link=makeShareLink(admin); await copyText(link); $('shareBox').textContent=link; showShareLinks(); setStatus('settingsStatus', admin?'Admin link copied. Do not share it with friends.':'Friend link copied. Share this link with friends.','ok'); }
   async function copyShareMessage(){ const link=makeShareLink(false); const msg='Join MTF World Cup Guess and submit your World Cup picks here:\n'+link; await copyText(msg); setStatus('settingsStatus','Friend link and message copied. You can paste it in WhatsApp.','ok'); }
 
-  async function ping(show){ const cfg=getCfg(); if(!cfg.endpoint){ if(show) setStatus('settingsStatus','Please paste Apps Script Web App URL first.','bad'); return; } try{ const r=await jsonp({action:'ping'}); if(r.ok){ if(show) setStatus('settingsStatus','Connected successfully: '+r.message,'ok'); $('heroStatus').textContent='Google Sheets connected.'; } else throw new Error(r.error||'Ping failed'); }catch(e){ if(show) setStatus('settingsStatus','Connection failed: '+e.message,'bad'); $('heroStatus').textContent='Database not connected.'; } }
+  async function ping(show){ const cfg=getCfg(); if(!cfg.endpoint){ if(show) setStatus('settingsStatus','Please paste Apps Script Web App URL first.','bad'); return; } try{ const r=await jsonp({action:'ping'}); if(r.ok){ if(show) setStatus('settingsStatus','Connected successfully: '+r.message,'ok'); $('heroStatus').textContent='Ready for submissions.'; } else throw new Error(r.error||'Ping failed'); }catch(e){ if(show) setStatus('settingsStatus','Connection failed: '+e.message,'bad'); $('heroStatus').textContent='Submission link not connected.'; } }
 
   async function submitPick(ev){ ev.preventDefault(); const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){ setStatus('submitStatus','This submission link is not connected yet. Please ask the organiser for the latest friend link.','bad'); return; }
     const playerName=$('playerName').value.trim(); if(!playerName){ setStatus('submitStatus','Your name is required.','bad'); return; }
     const picks=getFormPicks('');
     if(picks.champion && picks.runnerUp && picks.champion===picks.runnerUp){ setStatus('submitStatus','Champion and runner-up cannot be the same team.','bad'); return; }
-    setStatus('submitStatus','Saving to Google Sheet...','warn');
+    setStatus('submitStatus','Submitting your picks...','warn');
     const data={playerName,contact:$('contact').value.trim(),submittedAt:new Date().toISOString(),picks};
-    try{ const r=await jsonp({action:'submitPick',code:cfg.gameCode,payload:encodeBase64Url(JSON.stringify(data))}); if(!r.ok) throw new Error(r.error||'Submit failed'); setStatus('submitStatus',`Saved successfully for ${r.playerName}. Status: ${r.status}.\nYou can screenshot this page for backup.`, 'ok'); await loadPicks(false); showTab('participants'); } catch(e){ setStatus('submitStatus','Save failed: '+e.message,'bad'); }
+    try{ const r=await jsonp({action:'submitPick',code:cfg.gameCode,payload:encodeBase64Url(JSON.stringify(data))}); if(!r.ok) throw new Error(r.error||'Submit failed'); setStatus('submitStatus',`Submitted successfully for ${r.playerName}. Status: ${r.status}.\nYou can screenshot this page for backup.`, 'ok'); await loadPicks(false); showTab('participants'); } catch(e){ setStatus('submitStatus','Submit failed: '+e.message,'bad'); }
   }
 
   function getFormPicks(prefix){ const id = k => (prefix? prefix + k[0].toUpperCase()+k.slice(1): k); return {champion:val(id('champion')),runnerUp:val(id('runnerUp')),thirdPlace:val(id('thirdPlace')),fourthPlace:val(id('fourthPlace')),goldenBoot:val(id('goldenBoot')),goldenBall:val(id('goldenBall')),goldenGlove:val(id('goldenGlove')),mostAssists:val(id('mostAssists')),highestScoringTeam:val(id('highestScoringTeam')),darkHorse:val(id('darkHorse')),finalWinnerGoals:val(id('finalWinnerGoals')),finalRunnerUpGoals:val(id('finalRunnerUpGoals')),notes:val(id('notes'))}; }
@@ -365,7 +365,7 @@
   function countBy(arr){ return arr.reduce((a,x)=>{a[x]=(a[x]||0)+1;return a;},{}); }
 
   async function loadResults(){ const cfg=getCfg(); if(!cfg.endpoint||!cfg.gameCode){ setStatus('resultsStatus','Please configure Settings first.','bad'); return; } setStatus('resultsStatus','Loading results...','warn'); try{ const r=await jsonp({action:'getResults',code:cfg.gameCode}); if(!r.ok) throw new Error(r.error||'Load results failed'); state.results=r.results||{}; setResultsForm(state.results); setStatus('resultsStatus','Results loaded.','ok'); }catch(e){ setStatus('resultsStatus','Load failed: '+e.message,'bad'); } }
-  async function saveResults(){ const cfg=getCfg(); const pin=$('adminPin').value.trim(); localStorage.setItem('wcg_adminPin',pin); $('settingsAdminPin').value=pin; if(!cfg.endpoint||!cfg.gameCode){ setStatus('resultsStatus','Please configure Settings first.','bad'); return; } if(!pin){ setStatus('resultsStatus','Admin PIN required.','bad'); return; } state.results=getResultsForm(); setStatus('resultsStatus','Saving final results...','warn'); try{ const r=await jsonp({action:'saveResults',code:cfg.gameCode,adminPin:pin,payload:encodeBase64Url(JSON.stringify({results:state.results}))}); if(!r.ok) throw new Error(r.error||'Save results failed'); setStatus('resultsStatus','Final results saved to Google Sheet.','ok'); calculateAndRender(); }catch(e){ setStatus('resultsStatus','Save failed: '+e.message,'bad'); } }
+  async function saveResults(){ const cfg=getCfg(); const pin=$('adminPin').value.trim(); localStorage.setItem('wcg_adminPin',pin); $('settingsAdminPin').value=pin; if(!cfg.endpoint||!cfg.gameCode){ setStatus('resultsStatus','Please configure Settings first.','bad'); return; } if(!pin){ setStatus('resultsStatus','Admin PIN required.','bad'); return; } state.results=getResultsForm(); setStatus('resultsStatus','Saving final results...','warn'); try{ const r=await jsonp({action:'saveResults',code:cfg.gameCode,adminPin:pin,payload:encodeBase64Url(JSON.stringify({results:state.results}))}); if(!r.ok) throw new Error(r.error||'Save results failed'); setStatus('resultsStatus','Final results saved to Google Sheet.','ok'); calculateAndRender(); }catch(e){ setStatus('resultsStatus','Submit failed: '+e.message,'bad'); } }
   function getResultsForm(){ return {champion:val('resChampion'),runnerUp:val('resRunnerUp'),thirdPlace:val('resThirdPlace'),fourthPlace:val('resFourthPlace'),goldenBoot:val('resGoldenBoot'),goldenBall:val('resGoldenBall'),goldenGlove:val('resGoldenGlove'),mostAssists:val('resMostAssists'),highestScoringTeam:val('resHighestScoringTeam'),darkHorse:val('resDarkHorse'),finalWinnerGoals:val('resFinalWinnerGoals'),finalRunnerUpGoals:val('resFinalRunnerUpGoals')}; }
   function setResultsForm(r){ $('resChampion').value=r.champion||''; $('resRunnerUp').value=r.runnerUp||''; $('resThirdPlace').value=r.thirdPlace||''; $('resFourthPlace').value=r.fourthPlace||''; $('resGoldenBoot').value=r.goldenBoot||''; $('resGoldenBall').value=r.goldenBall||''; $('resGoldenGlove').value=r.goldenGlove||''; $('resMostAssists').value=r.mostAssists||''; $('resHighestScoringTeam').value=r.highestScoringTeam||''; $('resDarkHorse').value=r.darkHorse||''; $('resFinalWinnerGoals').value=r.finalWinnerGoals||''; $('resFinalRunnerUpGoals').value=r.finalRunnerUpGoals||''; }
   function calculateAndRender(showMsg=true){ state.results=getResultsForm(); const rows = state.picks.map(p=>scorePick(p)).sort((a,b)=>b.total-a.total || a.name.localeCompare(b.name)); renderLeaderboard(rows,'finalLeaderboard'); renderLeaderboard(rows,'leaderboardBox'); if(showMsg) setStatus('resultsStatus',`Calculated ${rows.length} player score(s).`, rows.length?'ok':'warn'); return rows; }
@@ -382,7 +382,7 @@
   function jsonp(params){ return new Promise((resolve,reject)=>{ const cfg=getCfg(); const endpoint=(cfg.endpoint||'').trim(); if(!endpoint) return reject(new Error('Apps Script URL not configured.')); const cb='wcg_cb_'+Date.now()+'_'+Math.floor(Math.random()*999999); params.callback=cb; const qs=Object.entries(params).filter(([,v])=>v!==undefined&&v!==null).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&'); const s=document.createElement('script'); const timer=setTimeout(()=>{cleanup(); reject(new Error('Request timed out. Check Apps Script deployment/access.'));},20000); function cleanup(){clearTimeout(timer); delete window[cb]; s.remove();} window[cb]=(data)=>{cleanup(); resolve(data);}; s.onerror=()=>{cleanup(); reject(new Error('Script request failed. Check URL ending /exec.'));}; s.src=endpoint + (endpoint.includes('?')?'&':'?') + qs; document.body.appendChild(s); }); }
   function encodeBase64Url(str){ const bytes=new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
   function decodeBase64Url(str){ let s=str.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; const bin=atob(s); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return new TextDecoder().decode(bytes); }
-  function updateHero(){ $('heroCount').textContent=state.picks.length||0; const cfg=getCfg(); $('heroStatus').textContent=cfg.endpoint?'Google Sheets connected / ready.':'Connect Google Sheets to start.'; }
+  function updateHero(){ $('heroCount').textContent=state.picks.length||0; const cfg=getCfg(); $('heroStatus').textContent=cfg.endpoint?'Ready for submissions.':'Open for setup.'; }
   function setStatus(id,msg,type){ const el=$(id); if(!el) return; el.textContent=msg; el.className='status '+(type||''); }
   function fmtDate(d){ if(!d) return ''; const dt=new Date(d); return isNaN(dt)?esc(d):dt.toLocaleString(); }
   function esc(v){ return String(v??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
