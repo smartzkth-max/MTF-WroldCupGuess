@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MTF World Cup Guess</title>
+  <title>World Cup Guess</title>
   <style>
     :root{--bg:#07111f;--panel:#162232;--panel2:#1d2a3c;--text:#f6f8fb;--muted:#aebbd0;--line:#304057;--accent:#4ee0a1;--accent2:#7dd3fc;--danger:#fb7185;--warn:#fbbf24;--shadow:0 20px 70px rgba(0,0,0,.35);--radius:24px}
     *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#13223a 0,#07111f 45%,#050b14 100%);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
@@ -21,7 +21,7 @@
   <header class="hero">
     <div>
       <div class="eyebrow">World Cup 2026 • Friends Game</div>
-      <h1>MTF World Cup Guess</h1>
+      <h1>World Cup Guess</h1>
       <p>Friends pick the champion, runner-up, Golden Boot and more. All entries are collected by the organiser, then the leaderboard is calculated after the tournament.</p>
       <div class="actions"><button class="primary" data-tabgo="submit">Submit picks</button><button data-tabgo="participants">Who joined?</button><button class="admin-only" data-tabgo="settings">Setup database</button></div>
     </div>
@@ -343,7 +343,7 @@
   function makeShareLink(admin){ const cfg=getCfg(); const payload={endpoint:cfg.endpoint,gameCode:cfg.gameCode,groupName:cfg.groupName,groupCode:cfg.groupCode}; if(admin) payload.adminPin=cfg.adminPin; return location.origin + location.pathname + '#setup=' + encodeBase64Url(JSON.stringify(payload)); }
   function qrUrl(text,size){ const s=Math.max(180,Math.min(Number(size)||360,1000)); return 'https://api.qrserver.com/v1/create-qr-code/?size='+s+'x'+s+'&margin=10&data='+encodeURIComponent(text); }
   async function copyLink(admin){ const link=makeShareLink(admin); await copyText(link); $('shareBox').textContent=link; showShareLinks(); setStatus('settingsStatus', admin?'Admin link copied. Do not share it with friends.':'Friend link copied. Share this link with friends.','ok'); }
-  async function copyShareMessage(){ const cfg=getCfg(); const link=makeShareLink(false); const msg='Join MTF World Cup Guess - '+cfg.groupName+' and submit your World Cup picks here:\n'+link; await copyText(msg); setStatus('settingsStatus','Friend link and message copied. You can paste it in WhatsApp.','ok'); }
+  async function copyShareMessage(){ const cfg=getCfg(); const link=makeShareLink(false); const msg='Join World Cup Guess - '+cfg.groupName+' and submit your World Cup picks here:\n'+link; await copyText(msg); setStatus('settingsStatus','Friend link and message copied. You can paste it in WhatsApp.','ok'); }
 
   async function ping(show){ const cfg=getCfg(); if(!cfg.endpoint){ if(show) setStatus('settingsStatus','Please paste Apps Script Web App URL first.','bad'); return; } try{ const r=await jsonp({action:'ping'}); if(r.ok){ if(show) setStatus('settingsStatus','Connected successfully: '+r.message,'ok'); $('heroStatus').textContent='Ready for submissions.'; } else throw new Error(r.error||'Ping failed'); }catch(e){ if(show) setStatus('settingsStatus','Connection failed: '+e.message,'bad'); $('heroStatus').textContent='Submission link not connected.'; } }
 
