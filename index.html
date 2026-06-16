@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MTF World Cup Guess</title>
+  <title>World Cup Guess</title>
   <style>
     :root{--bg:#07111f;--panel:#162232;--panel2:#1d2a3c;--text:#f6f8fb;--muted:#aebbd0;--line:#304057;--accent:#4ee0a1;--accent2:#7dd3fc;--danger:#fb7185;--warn:#fbbf24;--shadow:0 20px 70px rgba(0,0,0,.35);--radius:24px}
     *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#13223a 0,#07111f 45%,#050b14 100%);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
@@ -21,7 +21,7 @@
   <header class="hero">
     <div>
       <div class="eyebrow">World Cup 2026 • Friends Game</div>
-      <h1>MTF World Cup Guess</h1>
+      <h1>World Cup Guess</h1>
       <p>Friends pick the champion, runner-up, Golden Boot and more. All entries are collected by the organiser, then the leaderboard is calculated after the tournament.</p>
       <div class="actions"><button class="primary" data-tabgo="submit">Submit picks</button><button data-tabgo="participants">Who joined?</button><button class="admin-only" data-tabgo="settings">Setup database</button></div>
     </div>
@@ -162,8 +162,8 @@
         <label class="label">Apps Script Web App URL</label><input id="endpoint" placeholder="https://script.google.com/macros/s/.../exec" />
         <label class="label">Game Code</label><input id="gameCode" placeholder="Must match GAME_CODE in Code.gs" />
         <div class="row">
-          <div><label class="label">Current group name</label><input id="groupName" placeholder="e.g. MTF Friends" /></div>
-          <div><label class="label">Group code</label><input id="groupCode" placeholder="e.g. MTF" /></div>
+          <div><label class="label">Current group name</label><input id="groupName" placeholder="e.g. Office Friends" /></div>
+          <div><label class="label">Group code</label><input id="groupCode" placeholder="e.g. OFFICE" /></div>
         </div>
         <p class="hint">Each group gets its own friend link and QR code. Existing old entries are kept under Main Group / MAIN.</p>
         <label class="label">Admin PIN</label><input id="settingsAdminPin" type="password" placeholder="Optional on this device only" />
@@ -182,7 +182,7 @@
             <div class="share-title">QR code for friends</div>
             <p class="hint">Friends can scan this QR code to open the submission page. It uses the friend link only, not your admin PIN.</p>
             <div class="actions">
-              <a class="btn primary" id="downloadQrBtn" href="#" target="_blank" rel="noopener" download="MTF-WorldCupGuess-QR.png">Open / download QR</a>
+              <a class="btn primary" id="downloadQrBtn" href="#" target="_blank" rel="noopener" download="WorldCupGuess-QR.png">Open / download QR</a>
               <button id="copyShareMessageBtn" type="button">Copy link + message</button>
             </div>
           </div>
@@ -265,27 +265,28 @@
   }
 
   function bind(){
+    const on=(id,ev,fn)=>{ const el=$(id); if(el) el.addEventListener(ev,fn); };
     qsa('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
     qsa('[data-tabgo]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tabgo)));
-    $('pickForm').addEventListener('submit', submitPick);
-    $('resetFormBtn').addEventListener('click', () => $('pickForm').reset());
-    $('loadParticipantsBtn').addEventListener('click', loadPicks);
-    $('participantsTable').addEventListener('click', onParticipantsClick);
-    $('dashLoadBtn').addEventListener('click', loadPicks);
+    on('pickForm','submit', submitPick);
+    on('resetFormBtn','click', () => { const f=$('pickForm'); if(f) f.reset(); });
+    on('loadParticipantsBtn','click', loadPicks);
+    on('participantsTable','click', onParticipantsClick);
+    on('dashLoadBtn','click', loadPicks);
     if($('exportCsvBtn')) $('exportCsvBtn').addEventListener('click', exportCsv);
     if($('exportJsonBtn')) $('exportJsonBtn').addEventListener('click', exportJson);
-    $('loadResultsBtn').addEventListener('click', loadResults);
-    $('saveResultsBtn').addEventListener('click', saveResults);
-    $('calculateBtn').addEventListener('click', calculateAndRender);
-    $('resetPointsBtn').addEventListener('click', () => {state.points={...DEFAULT_POINTS}; savePoints(); renderPoints();});
-    $('saveSettingsBtn').addEventListener('click', saveSettings);
-    $('testBtn').addEventListener('click', () => ping(true));
-    $('clearSettingsBtn').addEventListener('click', clearSettings);
-    $('copyFriendLinkBtn').addEventListener('click', () => copyLink(false));
-    $('copyAdminLinkBtn').addEventListener('click', () => copyLink(true));
-    $('copyShareMessageBtn').addEventListener('click', copyShareMessage);
-    $('clearPicksBtn').addEventListener('click', clearPicks);
-    $('copySummaryBtn').addEventListener('click', copySummary);
+    on('loadResultsBtn','click', loadResults);
+    on('saveResultsBtn','click', saveResults);
+    on('calculateBtn','click', calculateAndRender);
+    on('resetPointsBtn','click', () => {state.points={...DEFAULT_POINTS}; savePoints(); renderPoints();});
+    on('saveSettingsBtn','click', saveSettings);
+    on('testBtn','click', () => ping(true));
+    on('clearSettingsBtn','click', clearSettings);
+    on('copyFriendLinkBtn','click', () => copyLink(false));
+    on('copyAdminLinkBtn','click', () => copyLink(true));
+    on('copyShareMessageBtn','click', copyShareMessage);
+    on('clearPicksBtn','click', clearPicks);
+    on('copySummaryBtn','click', copySummary);
     if($('allGroupsToggle')) $('allGroupsToggle').addEventListener('change', () => loadPicks(true));
   }
 
@@ -343,7 +344,7 @@
   function makeShareLink(admin){ const cfg=getCfg(); const payload={endpoint:cfg.endpoint,gameCode:cfg.gameCode,groupName:cfg.groupName,groupCode:cfg.groupCode}; if(admin) payload.adminPin=cfg.adminPin; return location.origin + location.pathname + '#setup=' + encodeBase64Url(JSON.stringify(payload)); }
   function qrUrl(text,size){ const s=Math.max(180,Math.min(Number(size)||360,1000)); return 'https://api.qrserver.com/v1/create-qr-code/?size='+s+'x'+s+'&margin=10&data='+encodeURIComponent(text); }
   async function copyLink(admin){ const link=makeShareLink(admin); await copyText(link); $('shareBox').textContent=link; showShareLinks(); setStatus('settingsStatus', admin?'Admin link copied. Do not share it with friends.':'Friend link copied. Share this link with friends.','ok'); }
-  async function copyShareMessage(){ const cfg=getCfg(); const link=makeShareLink(false); const msg='Join MTF World Cup Guess - '+cfg.groupName+' and submit your World Cup picks here:\n'+link; await copyText(msg); setStatus('settingsStatus','Friend link and message copied. You can paste it in WhatsApp.','ok'); }
+  async function copyShareMessage(){ const cfg=getCfg(); const link=makeShareLink(false); const msg='Join World Cup Guess - '+cfg.groupName+' and submit your World Cup picks here:\n'+link; await copyText(msg); setStatus('settingsStatus','Friend link and message copied. You can paste it in WhatsApp.','ok'); }
 
   async function ping(show){ const cfg=getCfg(); if(!cfg.endpoint){ if(show) setStatus('settingsStatus','Please paste Apps Script Web App URL first.','bad'); return; } try{ const r=await jsonp({action:'ping'}); if(r.ok){ if(show) setStatus('settingsStatus','Connected successfully: '+r.message,'ok'); $('heroStatus').textContent='Ready for submissions.'; } else throw new Error(r.error||'Ping failed'); }catch(e){ if(show) setStatus('settingsStatus','Connection failed: '+e.message,'bad'); $('heroStatus').textContent='Submission link not connected.'; } }
 
@@ -421,8 +422,8 @@
     }
   }
 
-  function exportCsv(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} const headers=['GroupName','GroupCode','PlayerName','Contact','Champion','RunnerUp','ThirdPlace','FourthPlace','GoldenBoot','GoldenBall','GoldenGlove','MostAssists','HighestScoringTeam','DarkHorse','FinalWinnerGoals','FinalRunnerUpGoals','UpdatedAt']; const rows=state.picks.map(p=>[p.groupName||'Main Group',p.groupCode||'MAIN',p.playerName,p.contact,p.picks.champion,p.picks.runnerUp,p.picks.thirdPlace,p.picks.fourthPlace,p.picks.goldenBoot,p.picks.goldenBall,p.picks.goldenGlove,p.picks.mostAssists,p.picks.highestScoringTeam,p.picks.darkHorse,p.picks.finalWinnerGoals,p.picks.finalRunnerUpGoals,p.updatedAt]); download('MTF-WorldCupGuess-picks.csv',[headers,...rows].map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv'); }
-  function exportJson(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} download('MTF-WorldCupGuess-picks.json',JSON.stringify({picks:state.picks,exportedAt:new Date().toISOString()},null,2),'application/json'); }
+  function exportCsv(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} const headers=['GroupName','GroupCode','PlayerName','Contact','Champion','RunnerUp','ThirdPlace','FourthPlace','GoldenBoot','GoldenBall','GoldenGlove','MostAssists','HighestScoringTeam','DarkHorse','FinalWinnerGoals','FinalRunnerUpGoals','UpdatedAt']; const rows=state.picks.map(p=>[p.groupName||'Main Group',p.groupCode||'MAIN',p.playerName,p.contact,p.picks.champion,p.picks.runnerUp,p.picks.thirdPlace,p.picks.fourthPlace,p.picks.goldenBoot,p.picks.goldenBall,p.picks.goldenGlove,p.picks.mostAssists,p.picks.highestScoringTeam,p.picks.darkHorse,p.picks.finalWinnerGoals,p.picks.finalRunnerUpGoals,p.updatedAt]); download('WorldCupGuess-picks.csv',[headers,...rows].map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv'); }
+  function exportJson(){ if(!state.picks.length){ setStatus('participantsStatus','Load participants first.','warn'); return;} download('WorldCupGuess-picks.json',JSON.stringify({picks:state.picks,exportedAt:new Date().toISOString()},null,2),'application/json'); }
   function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
   function csvCell(v){ v=String(v??''); return '"'+v.replace(/"/g,'""')+'"'; }
   async function clearPicks(){ const cfg=getCfg(); const pin=$('settingsAdminPin').value.trim() || $('adminPin').value.trim(); if(!confirm('Clear all submitted picks for '+cfg.groupName+' only?')) return; try{ const r=await jsonp({action:'clearPicks',code:cfg.gameCode,adminPin:pin,groupCode:cfg.groupCode}); if(!r.ok) throw new Error(r.error||'Clear failed'); state.picks=[]; renderParticipants(); updateHero(); setStatus('dangerStatus','Current group picks cleared. Other groups were not touched.','ok'); }catch(e){ setStatus('dangerStatus','Clear failed: '+e.message,'bad'); } }
